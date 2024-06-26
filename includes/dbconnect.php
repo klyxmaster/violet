@@ -11,7 +11,7 @@
  
 $dsn = 'mysql:host=localhost;dbname=violetpwm';
 $username = 'root';
-$password = '4179';
+$password = '';
 
 try {
     $con = new PDO($dsn, $username, $password);
