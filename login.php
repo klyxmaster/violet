@@ -8,25 +8,27 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
-session_start();
+
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
-if (isset($_GET['login'])) {
-    $username = $_GET['username'];
-    $password = sha1($username . ':' . $_GET['password']);
+session_start();
 
-    $user = getUserByUsernameAndPassword($con, $username, $password);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-    if ($user) {
+    $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && $user['password'] === sha1($username . ":" . $password)) {
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['unlock'] = true;
+        $_SESSION['username'] = $user['username']; // Ensure username is set in session
         header('Location: index.php');
         exit();
     } else {
-        $error = 'Invalid username or password';
+        $error = "Invalid username or password.";
     }
 }
 ?>
@@ -36,7 +38,7 @@ if (isset($_GET['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - VIOLET</title>
+    <title>Login - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -44,12 +46,13 @@ if (isset($_GET['login'])) {
         <h1 class="title">VIOLET</h1>
         <p class="subtitle">My Personal Password Manager</p>
         <?php if (isset($error)) echo "<p>$error</p>"; ?>
-        <form action="login.php" method="get">
+        <form action="login.php" method="post">
             <input type="text" name="username" placeholder="Username" required><br>
             <input type="password" name="password" placeholder="Password" required><br>
             <button type="submit" name="login">Login</button>
         </form>
         <p>Don't have an account? <a href="register.php">Register here</a>.</p>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

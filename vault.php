@@ -155,5 +155,6 @@ if (isset($_GET['unlock'])) {
 
         <p><a href="index.php">Back to Home</a></p>
     </div>
+	 <?php include 'footer.php'; ?>
 </body>
 </html>

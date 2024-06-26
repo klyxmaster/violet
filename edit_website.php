@@ -61,5 +61,6 @@ if (isset($_POST['update_website'])) {
         </form>
         <p><a href="vault.php?type=websites">Back to Vault</a></p>
     </div>
+	 <?php include 'footer.php'; ?>
 </body>
 </html>

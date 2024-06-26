@@ -67,5 +67,6 @@ if (isset($_POST['update_bank'])) {
         </form>
         <p><a href="vault.php?type=banks">Back to Vault</a></p>
     </div>
+	 <?php include 'footer.php'; ?>
 </body>
 </html>

@@ -8,22 +8,31 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
+
 include 'includes/dbconnect.php';
-include 'includes/functions.php';
 
 session_start();
 
-if (isset($_GET['register'])) {
-    $username = $_GET['username'];
-    $email = $_GET['email'];
-    $password = sha1($username . ':' . $_GET['password']);
-    $create_datetime = date('Y-m-d H:i:s');
+$stmt = $con->prepare('SELECT COUNT(*) FROM users');
+$stmt->execute();
+$userCount = $stmt->fetchColumn();
 
-    addUser($con, $username, $email, $password, $create_datetime);
+if ($userCount > 0) {
+    header('Location: account_exists.php');
+    exit();
+}
 
-    $_SESSION['success'] = 'Registration successful! Please log in.';
-    header('Location: register.php');
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $hashed_password = sha1($username . ":" . $password);
+    $create_datetime = date("Y-m-d H:i:s");
+
+    $stmt = $con->prepare('INSERT INTO users (username, email, password, create_datetime) VALUES (?, ?, ?, ?)');
+    $stmt->execute([$username, $email, $hashed_password, $create_datetime]);
+
+    header('Location: login.php');
     exit();
 }
 ?>
@@ -33,36 +42,28 @@ if (isset($_GET['register'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - VIOLET</title>
+    <title>Register - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const successMessage = document.getElementById('success-message');
-            if (successMessage) {
-                setTimeout(function() {
-                    window.location.href = 'login.php';
-                }, 3000); // Redirect after 3 seconds
-            }
-        });
-    </script>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">VIOLET</h1>
-        <p class="subtitle">My Personal Password Manager</p>
-        <?php
-        if (isset($_SESSION['success'])) {
-            echo '<p id="success-message">' . $_SESSION['success'] . '</p>';
-            unset($_SESSION['success']);
-        }
-        ?>
-        <form action="register.php" method="get">
-            <input type="text" name="username" placeholder="Username" required><br>
-            <input type="email" name="email" placeholder="Email" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
-            <button type="submit" name="register">Register</button>
+        <h1 class="title">Register</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Register</button>
         </form>
-        <p>Already have an account? <a href="login.php">Login here</a>.</p>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

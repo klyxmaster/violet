@@ -8,7 +8,6 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -18,17 +17,29 @@ if (!isset($_SESSION['user_id'])) {
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
-if (isset($_GET['add_website'])) {
-    $address = $_GET['address'];
-    $sitename = $_GET['sitename'];
-    $login = $_GET['login'];
-    $password = $_GET['password'];
+$duplicate_warning = "";
 
-    addWebsite($con, $address, $sitename, $login, $password);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $web_address = $_POST['web_address'];
+    $web_name = $_POST['web_name'];
+    $web_login = $_POST['web_login'];
+    $web_password = encryptData($_POST['web_password']);
 
-    $_SESSION['success'] = 'Website details added successfully!';
-    header('Location: add_website.php');
-    exit();
+    // Check for duplicates
+    $stmt = $con->prepare('SELECT * FROM websitedetails WHERE Web_Address = ?');
+    $stmt->execute([$web_address]);
+    $duplicates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($duplicates) > 0) {
+        $duplicate_warning = "Duplicate website entry found. Do you still want to add it?";
+    }
+
+    if (isset($_POST['confirm']) || count($duplicates) === 0) {
+        $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$web_address, $web_name, $web_login, $web_password]);
+
+        $success = "Website entry added successfully!";
+    }
 }
 ?>
 
@@ -37,32 +48,38 @@ if (isset($_GET['add_website'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Website - VIOLET</title>
+    <title>Add Website - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="title">VIOLET</h1>
-        <p class="subtitle">My Personal Password Manager</p>
-        <?php
-        if (isset($_SESSION['success'])) {
-            echo '<p>' . $_SESSION['success'] . '</p>';
-            unset($_SESSION['success']);
-            echo '<p><a href="add_website.php">Add Another</a> or <a href="index.php">Go Back to Main Menu</a></p>';
-        } else {
-            echo '
-            <h2>Add Website Details</h2>
-            <form action="add_website.php" method="get">
-                <input type="text" name="address" placeholder="Website Address" required><br>
-                <input type="text" name="sitename" placeholder="Website Name" required><br>
-                <input type="text" name="login" placeholder="Login" required><br>
-                <input type="password" name="password" placeholder="Password" required><br>
-                <button type="submit" name="add_website">Add Website</button>
+        <h1 class="title">Add Website</h1>
+        <?php if (isset($success)) echo "<p>$success</p>"; ?>
+        <?php if ($duplicate_warning) echo "<p>$duplicate_warning</p>"; ?>
+        <div class="form-container">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="web_address">Website Address:</label>
+                    <input type="text" id="web_address" name="web_address" required>
+                </div>
+                <div class="form-group">
+                    <label for="web_name">Website Name:</label>
+                    <input type="text" id="web_name" name="web_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="web_login">Login:</label>
+                    <input type="text" id="web_login" name="web_login" required>
+                </div>
+                <div class="form-group">
+                    <label for="web_password">Password:</label>
+                    <input type="password" id="web_password" name="web_password" required>
+                </div>
+                <?php if ($duplicate_warning) echo '<input type="hidden" name="confirm" value="1">'; ?>
+                <button type="submit">Add Website</button>
             </form>
-            <p><a href="index.php">Back to Home</a></p>
-            ';
-        }
-        ?>
+        </div>
+        <p><a href="index.php">Back to Home</a></p>
     </div>
+	 <?php include 'footer.php'; ?>
 </body>
 </html>

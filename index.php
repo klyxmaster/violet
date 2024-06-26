@@ -36,13 +36,26 @@ if (!isset($_SESSION['user_id'])) {
         <h1 class="title">VIOLET</h1>
         <p class="subtitle">My Personal Password Manager</p>
         <p>Welcome, <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>!</p>
-        <div class="menu">
-            <p><a href="vault.php?type=websites">View Website Details</a></p>
-            <p><a href="vault.php?type=banks">View Bank Details</a></p>
-            <p><a href="add_website.php">Add Website Details</a></p>
-            <p><a href="add_bank.php">Add Bank Details</a></p>
-            <p><a href="logout.php">Logout</a></p>
-        </div>
+        <div class="navbar">
+			<a href="index.php">Home</a>
+			<a href="vault.php?type=websites">View Websites</a>
+			<a href="vault.php?type=banks">View Banks</a>
+			<div class="dropdown">
+				<button class="dropbtn">Add/Edit
+					<i class="fa fa-caret-down"></i>
+				</button>
+				<div class="dropdown-content">
+					<a href="add_website.php">Add Website</a>
+					<a href="add_bank.php">Add Bank</a>
+					<a href="account_editor.php">Edit Account</a>
+				</div>
+			</div> 
+			<a href="about.php">About</a>
+			<a href="donate.php">Donate</a>
+			<a href="logoff.php">Logoff</a>
+		</div>
+	
     </div>
+	  <?php include 'footer.php'; ?>
 </body>
 </html>
