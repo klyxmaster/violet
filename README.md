@@ -19,6 +19,7 @@ Clone the repository to your local machine using the following command:
 
 ```bash
 git clone https://github.com/yourusername/violet-pwm.git
+```
 
 ### Step 2: Set Up the Database
 
@@ -28,10 +29,10 @@ git clone https://github.com/yourusername/violet-pwm.git
 
 Using MySQL Command Line
 
-bash
+```bash
 
 mysql -u yourusername -p yourpassword violet_pwm < path/to/violet_dist.sql
-
+```
 Using phpMyAdmin
 
     Open phpMyAdmin.
@@ -42,7 +43,7 @@ Using phpMyAdmin
 
     update the database connection settings.
 
-php
+```php
 
 <?php
 // config.php
@@ -54,12 +55,13 @@ define('DB_NAME', 'violet_pwm');
 
 define('ENCRYPTION_KEY', 'your-secret-key'); // Replace with your own secret key
 ?>
-
+```
     Set the correct file permissions for the project directory.
 
-bash
+```bash
 
 chmod -R 755 violet-pwm
+```
 
 ### Step 4: Run the Application
 
