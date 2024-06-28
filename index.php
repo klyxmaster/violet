@@ -14,8 +14,6 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
-
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
 ?>
 
 <!DOCTYPE html>
@@ -25,37 +23,47 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIOLET</title>
     <link rel="stylesheet" href="css/style.css">
-	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
-    <style>
-        .menu {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
 </head>
 <body>
     <div class="container">
         <h1 class="title">VIOLET</h1>
         <p class="subtitle">My Personal Password Manager</p>
-        <p>Welcome, <strong><?= htmlspecialchars($username); ?></strong>!</p>
-        <div class="navbar">
-            <a href="index.php">Home</a>
-            <a href="vault.php?type=websites">View Websites</a>
-            <a href="vault.php?type=banks">View Banks</a>
+        <p>Welcome, <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>!</p>
+        <div class="navbar">            
             <div class="dropdown">
-                <button class="dropbtn">Add/Edit
-                    <i class="fa fa-caret-down"></i>
-                </button>
+                <button class="dropbtn">View</button>
+                <div class="dropdown-content">
+                    <a href="vault.php?type=websites">View Websites</a>
+                    <a href="vault.php?type=banks">View Banks</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Add</button>
                 <div class="dropdown-content">
                     <a href="add_website.php">Add Website</a>
                     <a href="add_bank.php">Add Bank</a>
-                    <a href="account_editor.php">Edit Account</a>
-                    <a href="2fa_codes.php">View 2FA Codes</a>
                 </div>
-            </div> 
-            <a href="about.php">About</a>
-            <a href="donate.php">Donate</a>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Other</button>
+                <div class="dropdown-content">
+                    <a href="account_editor.php">Edit Account</a>
+                    <a href="about.php">About</a>
+                    <a href="donate.php">Donate</a>
+                   
+                </div>
+            </div>
+			
+			<div class="dropdown">
+                <button class="dropbtn">Import/Export</button>
+                <div class="dropdown-content">                    
+                    <a href="import.php?type=websites">Export Websites</a>
+                    <a href="import.php?type=banks">Export Banks</a>
+                    <a href="export.php?type=websites">Export Websites</a>
+                    <a href="export.php?type=banks">Export Banks</a>
+                </div>
+            </div>			
             <a href="logout.php">Logoff</a>
         </div>
     </div>
