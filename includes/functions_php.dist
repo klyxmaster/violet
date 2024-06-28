@@ -9,7 +9,7 @@
  * Subject: Violet PWM
  */
  
-define('ENCRYPTION_KEY', 'your-secret-key'); // Replace with your own secret key
+define('ENCRYPTION_KEY', 'violetnumb3rs#&64'); // Replace with your own secret key
 
 function encryptData($data) {
     $key = hash('sha256', ENCRYPTION_KEY);
@@ -84,4 +84,57 @@ function deleteBank($con, $id) {
     $stmt = $con->prepare('DELETE FROM bankdetails WHERE Bank_ID = ?');
     $stmt->execute([$id]);
 }
-?>
+
+function generate2FACodes($count = 50) {
+    $codes = [];
+    for ($i = 0; $i < $count; $i++) {
+        $codes[] = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    }
+    return $codes;
+}
+
+function save2FACodes($codes) {
+    return implode(',', $codes);
+}
+
+function get2FACodes($codes_str) {
+    return explode(',', $codes_str);
+}
+
+function use2FACode($code, $codes_str) {
+    $codes = get2FACodes($codes_str);
+    if (in_array($code, $codes)) {
+        $codes = array_diff($codes, [$code]);
+        return save2FACodes($codes);
+    }
+    return false;
+}
+
+function getTotalItems($con, $type) {
+    if ($type == 'websites') {
+        $stmt = $con->query('SELECT COUNT(*) FROM websitedetails');
+    } else {
+        $stmt = $con->query('SELECT COUNT(*) FROM bankdetails');
+    }
+    return $stmt->fetchColumn();
+}
+
+function getItems($con, $type, $limit, $offset) {
+    if ($type == 'websites') {
+        $stmt = $con->prepare("SELECT * FROM websitedetails ORDER BY Web_Name ASC LIMIT $limit OFFSET $offset");
+    } else {
+        $stmt = $con->prepare("SELECT * FROM bankdetails ORDER BY Bank_Name ASC LIMIT $limit OFFSET $offset");
+    }
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getItemsByType($con, $type, $limit, $offset) {
+    if ($type === 'websites') {
+        $stmt = $con->prepare('SELECT Web_ID as id, Web_Name as name, Web_Address as details FROM websitedetails LIMIT ? OFFSET ?');
+    } else {
+        $stmt = $con->prepare('SELECT Bank_ID as id, Bank_Name as name, Bank_CardNum as details FROM bankdetails LIMIT ? OFFSET ?');
+    }
+    $stmt->execute([$limit, $offset]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

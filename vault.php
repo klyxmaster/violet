@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 /**
  * Proprietary License
  *
@@ -9,7 +12,7 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -21,6 +24,10 @@ include 'includes/functions.php';
 
 $showData = false;
 $type = '';
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$items_per_page = 10;
+$offset = ($page - 1) * $items_per_page;
+
 if (isset($_SESSION['unlock'])) {
     $showData = true;
     $type = $_GET['type'];
@@ -41,6 +48,10 @@ if (isset($_GET['unlock'])) {
         $error = 'Invalid password';
     }
 }
+
+$total_items = getTotalItems($con, $type);
+$total_pages = ceil($total_items / $items_per_page);
+
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +61,7 @@ if (isset($_GET['unlock'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vault - VIOLET</title>
     <link rel="stylesheet" href="css/style.css">
-	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -94,8 +105,8 @@ if (isset($_GET['unlock'])) {
                             <th>Actions</th>
                         </tr>
                         <?php
-                        $stmt = $con->query('SELECT * FROM websitedetails ORDER BY Web_Name Asc');
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $websites = getItems($con, 'websites', $items_per_page, $offset);
+                        foreach ($websites as $row) {
                             echo '<tr>';
                             echo '<td>' . htmlspecialchars($row['Web_ID']) . '</td>';
                             echo '<td>' . htmlspecialchars($row['Web_Address']) . '</td>';
@@ -125,8 +136,8 @@ if (isset($_GET['unlock'])) {
                             <th>Actions</th>
                         </tr>
                         <?php
-                        $stmt = $con->query('SELECT * FROM bankdetails ORDER BY Bank_Name ASC');
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $banks = getItems($con, 'banks', $items_per_page, $offset);
+                        foreach ($banks as $row) {
                             echo '<tr>';
                             echo '<td>' . htmlspecialchars($row['Bank_ID']) . '</td>';
                             echo '<td>' . htmlspecialchars($row['Bank_Name']) . '</td>';
@@ -146,16 +157,24 @@ if (isset($_GET['unlock'])) {
                     </table>
                 <?php endif; ?>
             </div>
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a href="vault.php?type=<?= $type ?>&page=<?= $page - 1 ?>">Prev</a>
+                <?php endif; ?>
+                <a href="index.php">Menu</a>
+                <?php if ($page < $total_pages): ?>
+                    <a href="vault.php?type=<?= $type ?>&page=<?= $page + 1 ?>">Next</a>
+                <?php endif; ?>
+            </div>
         <?php else: ?>
             <form action="vault.php" method="get">
                 <input type="password" name="password" placeholder="Enter your password to unlock" required autofocus><br>
-                <input type="hidden" name="type" value="<?= htmlspecialchars($_GET['type']); ?>">
+                <input type="hidden" name="type" value="<?= htmlspecialchars($_GET['type']) ?>">
                 <button type="submit" name="unlock">Unlock</button>
             </form>
         <?php endif; ?>
 
-        <p><a href="index.php">Back to Home</a></p>
     </div>
-	 <?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
