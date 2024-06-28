@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="form-group">
                     <label for="bank_name">Bank Name:</label>
-                    <input type="text" id="bank_name" name="bank_name" required>
+                    <input type="text" id="bank_name" name="bank_name" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="card_num">Card Number:</label>

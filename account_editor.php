@@ -87,7 +87,7 @@ $codes = $user['2fa_str'] ? get2FACodes($user['2fa_str']) : [];
             <form method="POST">
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>

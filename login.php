@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p class="subtitle">My Personal Password Manager</p>
         <?php if (isset($error)) echo "<p>$error</p>"; ?>
         <form action="login.php" method="post">
-            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="text" name="username" placeholder="Username" required autofocus><br>
             <input type="password" name="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
         </form>

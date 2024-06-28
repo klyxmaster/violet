@@ -148,7 +148,7 @@ if (isset($_GET['unlock'])) {
             </div>
         <?php else: ?>
             <form action="vault.php" method="get">
-                <input type="password" name="password" placeholder="Enter your password to unlock" required><br>
+                <input type="password" name="password" placeholder="Enter your password to unlock" required autofocus><br>
                 <input type="hidden" name="type" value="<?= htmlspecialchars($_GET['type']); ?>">
                 <button type="submit" name="unlock">Unlock</button>
             </form>

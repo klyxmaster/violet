@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <div class="form-group">
                 <label for="code">Enter 2FA Code:</label>
-                <input type="text" id="code" name="code" required>
+                <input type="text" id="code" name="code" required autofocus>
             </div>
             <button type="submit">Verify</button>
         </form>

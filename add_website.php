@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="form-group">
                     <label for="web_address">Website Address:</label>
-                    <input type="text" id="web_address" name="web_address" required>
+                    <input type="text" id="web_address" name="web_address" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="web_name">Website Name:</label>

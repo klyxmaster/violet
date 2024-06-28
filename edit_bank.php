@@ -57,7 +57,7 @@ if (isset($_POST['update_bank'])) {
         <h2>Edit Bank Details</h2>
         <form action="edit_bank.php" method="post">
             <input type="hidden" name="id" value="<?= htmlspecialchars($bank['Bank_ID']); ?>">
-            <input type="text" name="bankname" placeholder="Bank Name" value="<?= htmlspecialchars($bank['Bank_Name']); ?>" required><br>
+            <input type="text" name="bankname" placeholder="Bank Name" value="<?= htmlspecialchars($bank['Bank_Name']); ?>" required autofocus><br>
             <input type="text" name="cardnum" placeholder="Card Number" value="<?= htmlspecialchars(decryptData($bank['Bank_CardNum'])); ?>" required><br>
             <input type="text" name="validthru" placeholder="Valid Thru" value="<?= htmlspecialchars($bank['Bank_ValidThru']); ?>" required><br>
             <input type="text" name="cardholder" placeholder="Card Holder" value="<?= htmlspecialchars($bank['Bank_CardHolder']); ?>" required><br>
