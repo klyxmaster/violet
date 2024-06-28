@@ -17,33 +17,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = sha1($user['username'] . ':' . $current_password); // Adjust as per your hashing method
 
     if ($hashed_password === $user['password']) {
-        if (isset($_POST['generate_2fa_codes'])) {
-            $new_codes = generate2FACodes();
-            $codes_str = save2FACodes($new_codes);
-            $stmt = $con->prepare('UPDATE users SET 2fa_str = ? WHERE id = ?');
-            $stmt->execute([$codes_str, $_SESSION['user_id']]);
-            $user['2fa_str'] = $codes_str;
-            header('Location: 2fa_codes.php'); // Redirect to view the new codes
-            exit();
-        } else {
-            // Existing logic for updating username, email, password
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $new_password = $_POST['new_password'];
-            $confirm_password = $_POST['confirm_password'];
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+        $twofa_enabled = isset($_POST['2fa_enabled']) ? 1 : 0;
 
-            if (!empty($new_password) && ($new_password === $confirm_password)) {
-                $hashed_new_password = sha1($username . ':' . $new_password); // Adjust as per your hashing method
-                $stmt = $con->prepare('UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?');
-                $stmt->execute([$username, $email, $hashed_new_password, $_SESSION['user_id']]);
-            } else {
-                $stmt = $con->prepare('UPDATE users SET username = ?, email = ? WHERE id = ?');
-                $stmt->execute([$username, $email, $_SESSION['user_id']]);
+        if ($twofa_enabled) {
+            if (isset($_POST['generate_2fa_codes'])) {
+                $new_codes = generate2FACodes();
+                $codes_str = save2FACodes($new_codes);
+                $stmt = $con->prepare('UPDATE users SET 2fa_str = ? WHERE id = ?');
+                $stmt->execute([$codes_str, $_SESSION['user_id']]);
+                $user['2fa_str'] = $codes_str;
+                header('Location: 2fa_codes.php'); // Redirect to view the new codes
+                exit();
             }
-            // Redirect to the menu after successful edit
-            header('Location: index.php');
-            exit();
+        } else {
+            $stmt = $con->prepare('UPDATE users SET 2fa_str = NULL WHERE id = ?');
+            $stmt->execute([$_SESSION['user_id']]);
+            $user['2fa_str'] = NULL;
         }
+
+        if (!empty($new_password) && ($new_password === $confirm_password)) {
+            $hashed_new_password = sha1($username . ':' . $new_password); // Adjust as per your hashing method
+            $stmt = $con->prepare('UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?');
+            $stmt->execute([$username, $email, $hashed_new_password, $_SESSION['user_id']]);
+        } else {
+            $stmt = $con->prepare('UPDATE users SET username = ?, email = ? WHERE id = ?');
+            $stmt->execute([$username, $email, $_SESSION['user_id']]);
+        }
+        // Redirect to the appropriate view after successful edit
+        header('Location: index.php');
+        exit();
     } else {
         $error = "Incorrect current password.";
     }
@@ -60,7 +66,6 @@ $codes = $user['2fa_str'] ? get2FACodes($user['2fa_str']) : [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Editor - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
-	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
     <script>
         function toggle2FAButton() {
             var checkbox = document.getElementById('2fa_enabled');
@@ -71,13 +76,9 @@ $codes = $user['2fa_str'] ? get2FACodes($user['2fa_str']) : [];
                 button.style.display = 'none';
             }
         }
-
-        window.onload = function() {
-            toggle2FAButton();
-        }
     </script>
 </head>
-<body>
+<body onload="toggle2FAButton()">
     <div class="container">
         <h1 class="title">Account Editor</h1>
         <?php if (isset($success)) echo "<p>$success</p>"; ?>
@@ -105,8 +106,8 @@ $codes = $user['2fa_str'] ? get2FACodes($user['2fa_str']) : [];
                     <input type="password" id="confirm_password" name="confirm_password">
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" id="2fa_enabled" name="2fa_enabled" onclick="toggle2FAButton()">
-                    <label for="2fa_enabled">Enable 2FA (Future Feature)</label>
+                    <input type="checkbox" id="2fa_enabled" name="2fa_enabled" <?php if ($user['2fa_str']) echo 'checked'; ?> onclick="toggle2FAButton()">
+                    <label for="2fa_enabled">Enable 2FA</label>
                 </div>
                 <button type="submit">Save Changes</button>
                 <button type="button" onclick="window.location.href='index.php'">Cancel</button>

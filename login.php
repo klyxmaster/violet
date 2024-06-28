@@ -3,27 +3,29 @@ session_start();
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $hashed_password = sha1($username . ':' . $password); // Adjust as per your hashing method
-
-    $stmt = $con->prepare('SELECT id, username, password, 2fa_str FROM users WHERE username = ?');
+    $stmt = $con->prepare('SELECT id, password, 2fa_str FROM users WHERE username = ?');
     $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && $hashed_password === $user['password']) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        
-        // Check the number of remaining codes
-        $remaining_codes = get2FACodes($user['2fa_str']);
-        if (count($remaining_codes) <= 5) {
-            $_SESSION['2fa_reminder'] = "You have " . count($remaining_codes) . " 2FA codes left. Please generate new codes.";
+    if ($user && sha1($username . ':' . $password) === $user['password']) {
+        if ($user['2fa_str']) {
+            $_SESSION['2fa_pending'] = $user['id'];
+            header('Location: verify_otp.php');
+            exit();
+        } else {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $username;
+            header('Location: index.php');
+            exit();
         }
-
-        header('Location: index.php');
-        exit();
     } else {
         $error = "Invalid username or password.";
     }
@@ -37,21 +39,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
-	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Login</h1>
+        <h1 class="title">Violet PWM</h1>
+        <p class="subtitle">My Personal Password Manager</p>
         <?php if (isset($error)) echo "<p>$error</p>"; ?>
-        <form method="POST">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+        <form action="login.php" method="post">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
         </form>
         <p>Don't have an account? <a href="register.php">Register here</a>.</p>

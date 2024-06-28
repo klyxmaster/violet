@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2024-06-26 06:04:06
+Date: 2024-06-27 09:18:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -45,8 +45,13 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `create_datetime` datetime NOT NULL,
+  `2fa` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
 
 
 -- ----------------------------
@@ -62,3 +67,6 @@ CREATE TABLE `websitedetails` (
   PRIMARY KEY (`Web_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- ----------------------------
+-- Records of websitedetails
+-- ----------------------------
