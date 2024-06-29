@@ -8,8 +8,6 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
-define('ENCRYPTION_KEY', 'your_secret_key'); // Replace with your own secret key
 
 function encryptData($data) {
     $key = hash('sha256', ENCRYPTION_KEY);

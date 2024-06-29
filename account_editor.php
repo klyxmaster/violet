@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
-
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 

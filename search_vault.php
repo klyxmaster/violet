@@ -14,6 +14,7 @@ if (!isset($_SESSION['user_id'])) {
     exit('Unauthorized access');
 }
 
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 

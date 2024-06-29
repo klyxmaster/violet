@@ -15,6 +15,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 

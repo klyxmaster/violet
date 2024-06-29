@@ -8,6 +8,7 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
+include 'includes/config.php'; 
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 

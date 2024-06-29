@@ -5,6 +5,7 @@ if (!isset($_SESSION['2fa_pending'])) {
     exit();
 }
 
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
