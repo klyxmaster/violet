@@ -1,59 +1,35 @@
 <?php
-/**
- * Proprietary License
- *
- * Copyright (c) 2024 Richard Scorpio
- *
- * All rights reserved. This software is proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.
- * Contact rickscorpio@proton.me for licensing information.
- * Subject: Violet PWM
- */
-
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
-include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
-$type = isset($_GET['type']) ? $_GET['type'] : null;
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['import_file'])) {
+    $type = $_POST['type'];
+    $xml = simplexml_load_file($_FILES['import_file']['tmp_name']);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-    $file = $_FILES['file']['tmp_name'];
-    $xml = simplexml_load_file($file);
-
-    if ($type === 'websites') {
-        foreach ($xml->item as $item) {
-            $address = (string)$item->Web_Address;
-            $name = (string)$item->Web_Name;
-            $login = (string)$item->Web_Login;
-            $password = encryptData((string)$item->Web_Password);
-
-            $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password) VALUES (?, ?, ?, ?)');
-            $stmt->execute([$address, $name, $login, $password]);
-        }
-    } elseif ($type === 'banks') {
-        foreach ($xml->item as $item) {
-            $name = (string)$item->Bank_Name;
-            $cardNum = encryptData((string)$item->Bank_CardNum);
-            $validThru = (string)$item->Bank_ValidThru;
-            $cardHolder = (string)$item->Bank_CardHolder;
-            $cvv = encryptData((string)$item->Bank_Cvv);
-            $cardType = (string)$item->Bank_CardType;
-            $pin = encryptData((string)$item->Bank_Pin);
-
-            $stmt = $con->prepare('INSERT INTO bankdetails (Bank_Name, Bank_CardNum, Bank_ValidThru, Bank_CardHolder, Bank_Cvv, Bank_CardType, Bank_Pin) VALUES (?, ?, ?, ?, ?, ?, ?)');
-            $stmt->execute([$name, $cardNum, $validThru, $cardHolder, $cvv, $cardType, $pin]);
-        }
+    if ($type == 'websites') {
+        $stmt = $con->prepare('INSERT INTO websitedetails (Web_ID, Web_Address, Web_Name, Web_Login, Web_Password) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Web_Address = VALUES(Web_Address), Web_Name = VALUES(Web_Name), Web_Login = VALUES(Web_Login), Web_Password = VALUES(Web_Password)');
+    } elseif ($type == 'banks') {
+        $stmt = $con->prepare('INSERT INTO bankdetails (Bank_ID, Bank_Name, Bank_CardNum, Bank_ValidThru, Bank_CardHolder, Bank_Cvv, Bank_CardType, Bank_Pin) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Bank_Name = VALUES(Bank_Name), Bank_CardNum = VALUES(Bank_CardNum), Bank_ValidThru = VALUES(Bank_ValidThru), Bank_CardHolder = VALUES(Bank_CardHolder), Bank_Cvv = VALUES(Bank_Cvv), Bank_CardType = VALUES(Bank_CardType), Bank_Pin = VALUES(Bank_Pin)');
     } else {
-        die('Invalid import type.');
+        die('Invalid type');
     }
 
-    $_SESSION['success'] = ucfirst($type) . ' data imported successfully!';
-    header('Location: vault.php?type=' . $type);
+    foreach ($xml as $item) {
+        if ($type == 'websites') {
+            $stmt->execute([$item->Web_ID, $item->Web_Address, $item->Web_Name, $item->Web_Login, $item->Web_Password]);
+        } elseif ($type == 'banks') {
+            $stmt->execute([$item->Bank_ID, $item->Bank_Name, $item->Bank_CardNum, $item->Bank_ValidThru, $item->Bank_CardHolder, $item->Bank_Cvv, $item->Bank_CardType, $item->Bank_Pin]);
+        }
+    }
+
+    $_SESSION['success'] = ucfirst($type) . ' imported successfully!';
+    header('Location: index.php');
     exit();
 }
 ?>
@@ -68,12 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 </head>
 <body>
     <div class="container">
-        <h1 class="title">VIOLET</h1>
-        <p class="subtitle">Import Data</p>
-        <form method="POST" enctype="multipart/form-data">
-            <p>Select XML file to import <?= htmlspecialchars($type) ?> data:</p>
-            <input type="file" name="file" accept=".xml" required>
+        <h1 class="title">Import Data</h1>
+        <form action="import.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="type" value="<?= htmlspecialchars($_GET['type']); ?>">
+            <input type="file" name="import_file" required><br>
             <button type="submit">Import</button>
         </form>
         <p><a href="index.php">Back to Home</a></p>
-    </di
+    </div>
+    <?php include 'footer.php'; ?>
+</body>
+</html>
