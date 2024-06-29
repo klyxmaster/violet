@@ -61,7 +61,7 @@ $total_pages = ceil($total_items / $items_per_page);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vault - VIOLET</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -79,6 +79,60 @@ $total_pages = ceil($total_items / $items_per_page);
             });
         });
     </script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #2d2d2d;
+            color: #f5f5f5;
+            font-size: 14px; /* Adjust the font size */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #4b4b4b;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #4b4b4b;
+            color: #d6d4e0;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #3d3d3d;
+        }
+
+        table tr:hover {
+            background-color: #555555;
+        }
+
+        .button-link {
+            text-decoration: none;
+            color: #fff;
+            background-color: #5b9aa0;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .button-link:hover {
+            background-color: #d6d4e0;
+            color: #622569;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-link:active {
+            transform: scale(1);
+            box-shadow: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -92,6 +146,15 @@ $total_pages = ceil($total_items / $items_per_page);
 
         <?php if ($showData): ?>
             <input type="text" id="search" placeholder="Search...">
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a href="vault.php?type=<?= $type ?>&page=<?= $page - 1 ?>" class="button-link">Prev</a>
+                <?php endif; ?>
+                <a href="index.php" class="button-link">Menu</a>
+                <?php if ($page < $total_pages): ?>
+                    <a href="vault.php?type=<?= $type ?>&page=<?= $page + 1 ?>" class="button-link">Next</a>
+                <?php endif; ?>
+            </div>
             <div id="results">
                 <?php if ($type == 'websites'): ?>
                     <h2>Website Details</h2>
@@ -138,7 +201,7 @@ $total_pages = ceil($total_items / $items_per_page);
                             <th>Card Holder</th>
                             <th>CVV</th>
                             <th>Card Type</th>
-                            <th>PIN</th>
+                                                        <th>PIN</th>
                             <th>Actions</th>
                             <th>Date Created</th>
                             <th>Date Edited</th>
@@ -162,21 +225,9 @@ $total_pages = ceil($total_items / $items_per_page);
 							echo '<td>' . htmlspecialchars($row['Bank_Date_Created'] ?? '') . '</td>';
 							echo '<td>' . htmlspecialchars($row['Bank_Date_Edited'] ?? '') . '</td>';
 							echo '</tr>';
-							
-
-
 						}
                         ?>
                     </table>
-                <?php endif; ?>
-            </div>
-            <div class="pagination">
-                <?php if ($page > 1): ?>
-                    <a href="vault.php?type=<?= $type ?>&page=<?= $page - 1 ?>" class="button-link">Prev</a>
-                <?php endif; ?>
-                <a href="index.php" class="button-link">Menu</a>
-                <?php if ($page < $total_pages): ?>
-                    <a href="vault.php?type=<?= $type ?>&page=<?= $page + 1 ?>" class="button-link">Next</a>
                 <?php endif; ?>
             </div>
         <?php else: ?>
@@ -190,3 +241,4 @@ $total_pages = ceil($total_items / $items_per_page);
     <?php include 'footer.php'; ?>
 </body>
 </html>
+

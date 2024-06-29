@@ -11,7 +11,6 @@
  
 define('ENCRYPTION_KEY', 'your_secret_key'); // Replace with your own secret key
 
-
 function encryptData($data) {
     $key = hash('sha256', ENCRYPTION_KEY);
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));

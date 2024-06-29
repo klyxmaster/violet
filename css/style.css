@@ -1,38 +1,36 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #622569;
+    background: linear-gradient(to bottom right, #2c2c54, #22223b);
     color: #d6d4e0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-	font-size: .75em;
 }
 
 .container {
     max-width: 950px;
     width: 100%;
     padding: 40px;
-    background-color: #b8a9c9;
-    border-radius: 8px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 10px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to bottom right, #1e1e2f, #3e3e50);
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 10px 15px rgba(0, 0, 0, 0.5);
     text-align: center;
-    color: #4B0082; /* Dark purple color for text */
+    color: #d6d4e0;
 }
 
 .title {
     font-size: 48px;
-    color: #5b9aa0;
+    color: #e94560;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0
-	, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     font-weight: 700;
 }
 
 .subtitle {
     font-size: 20px;
-    color: #03396c;
+    color: #f8f9fa;
     font-weight: 600;
     margin-bottom: 20px;
 }
@@ -45,17 +43,18 @@ input[type="email"] {
     margin: 10px 0;
     border: 1px solid #5b9aa0;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    background-color: #d6d4e0;
-    color: #03396c;
+    background: linear-gradient(to bottom, #e0e0e0, #f5f5f5);
+    color: #333;
     font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); /* Inner shadow for concave effect */
+    transition: all 0.3s ease;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus {
-    border-color: #03396c;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-color: #e94560;
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.8), inset 0 2px 4px rgba(0, 0, 0, 0.5); /* Adjust inner shadow on focus */
     outline: none;
 }
 
@@ -63,53 +62,85 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     color: #d6d4e0;
-    background-color: #5b9aa0;
+    background-color: #e94560;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin: 10px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
 button:hover {
-    background-color: #03396c;
+    background-color: #f8f9fa;
+    color: #e94560;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 a {
-    color: #5b9aa0;
+    color: #e94560;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #03396c;
+    color: #f8f9fa;
     text-decoration: underline;
 }
 
-/* Table styles for vault */
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
+    background-color: #2d2d2d;
+    color: #f5f5f5;
+    font-size: 14px; /* Adjust the font size */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 table th, table td {
     padding: 10px;
-    border: 1px solid #5b9aa0;
+    border: 1px solid #4b4b4b;
     text-align: left;
-    background-color: #d6d4e0;
-    color: #03396c;
 }
 
 table th {
-    background-color: #5b9aa0;
+    background-color: #4b4b4b;
     color: #d6d4e0;
 }
 
 table tr:nth-child(even) {
-    background-color: #b8a9c9;
+    background-color: #3d3d3d;
 }
 
-/* Menu button styles */
+table tr:hover {
+    background-color: #555555;
+}
+
+.button-link {
+    text-decoration: none;
+    color: #fff;
+    background-color: #5b9aa0;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.button-link:hover {
+    background-color: #d6d4e0;
+    color: #622569;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-link:active {
+    transform: scale(1);
+    box-shadow: none;
+}
+
 .menu {
     display: flex;
     justify-content: center;
@@ -119,7 +150,7 @@ table tr:nth-child(even) {
 .menu a {
     text-decoration: none;
     color: #fff;
-    background-color: #5b9aa0;
+    background-color: #e94560;
     padding: 10px 20px;
     margin: 5px;
     border-radius: 5px;
@@ -128,10 +159,10 @@ table tr:nth-child(even) {
 }
 
 .menu a:hover {
-    background-color: #d6d4e0;
-    color: #622569;
+    background-color: #f8f9fa;
+    color: #e94560;
     transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .menu a:active {
@@ -139,10 +170,9 @@ table tr:nth-child(even) {
     box-shadow: none;
 }
 
-/* Navigation bar styles */
 .navbar {
     overflow: hidden;
-    background-color: #5b9aa0;
+    background-color: #2d2d44;
     display: flex;
     justify-content: center;
     font-family: Arial, sans-serif;
@@ -151,16 +181,16 @@ table tr:nth-child(even) {
 .navbar a {
     float: left;
     display: block;
-    color: white;
+    color: #f8f9fa;
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .navbar a:hover {
-    background-color: #d6d4e0;
-    color: #622569;
+    background-color: #e94560;
+    color: #f8f9fa;
 }
 
 .dropdown {
@@ -169,51 +199,50 @@ table tr:nth-child(even) {
 }
 
 .dropdown .dropbtn {
-    font-size: 16px;  
+    font-size: 16px;
     border: none;
     outline: none;
-    color: white;
+    color: #f8f9fa;
     padding: 14px 20px;
     background-color: inherit;
     font-family: inherit;
     margin: 0;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn {
-    background-color: #d6d4e0;
-    color: #622569;
+    background-color: #e94560;
+    color: #f8f9fa;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #5b9aa0;
+    background-color: #2d2d44;
     min-width: 160px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     z-index: 1;
 }
 
 .dropdown-content a {
     float: none;
-    color: white;
+    color: #f8f9fa;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
     text-align: left;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .dropdown-content a:hover {
-    background-color: #d6d4e0;
-    color: #622569;
+    background-color: #e94560;
+    color: #f8f9fa;
 }
 
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-/* Form container */
 .form-container {
     display: flex;
     flex-direction: column;
@@ -237,37 +266,41 @@ form {
 form label {
     width: 150px;
     font-weight: bold;
-    color: #4B0082; /* Dark purple color */
+    color: #d6d4e0;
 }
 
 form input {
     flex: 1;
     padding: 10px;
     margin-left: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #5b9aa0;
     border-radius: 5px;
+    background: linear-gradient(to top, #000000, #050505, #0A0A0A, #101010); /* Even darker gradient */
+    color: #f5f5f5;
+    box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 1.0); /* Much larger inner shadow for an even more pronounced concave effect */
 }
+
+
 
 form button {
     margin-top: 20px;
     padding: 10px;
-    background-color: #5b9aa0;
-    color: #fff;
+    background-color: #e94560;
+    color: #f8f9fa;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 form button:hover {
-    background-color: #d6d4e0;
-    color: #622569;
+    background-color: #f8f9fa;
+    color: #e94560;
 }
 
-/* Footer styles */
 .footer {
-    background-color: #8B6F91; /* New color for better contrast */
-    color: #4B0082; /* Dark purple text */
+    background-color: #8B6F91;
+    color: #f8f9fa;
     text-align: center;
     padding: 10px 0;
     position: fixed;
