@@ -174,6 +174,7 @@ $total_pages = ceil($total_items / $items_per_page);
             </form>
         <?php endif; ?>
 
+    
     </div>
     <?php include 'footer.php'; ?>
 </body>

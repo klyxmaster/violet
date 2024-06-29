@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
         <h1 class="title">VIOLET</h1>
         <p class="subtitle">My Personal Password Manager</p>
         <p>Welcome, <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>!</p>
-        <div class="navbar">            
+        <div class="navbar">
             <div class="dropdown">
                 <button class="dropbtn">View</button>
                 <div class="dropdown-content">
@@ -51,19 +51,17 @@ if (!isset($_SESSION['user_id'])) {
                     <a href="account_editor.php">Edit Account</a>
                     <a href="about.php">About</a>
                     <a href="donate.php">Donate</a>
-                   
                 </div>
             </div>
-			
-			<div class="dropdown">
+            <div class="dropdown">
                 <button class="dropbtn">Import/Export</button>
-                <div class="dropdown-content">                    
-                    <a href="import.php?type=websites">Export Websites</a>
-                    <a href="import.php?type=banks">Export Banks</a>
+                <div class="dropdown-content">
+                    <a href="import.php?type=websites">Import Websites</a>
+                    <a href="import.php?type=banks">Import Banks</a>
                     <a href="export.php?type=websites">Export Websites</a>
                     <a href="export.php?type=banks">Export Banks</a>
                 </div>
-            </div>			
+            </div>
             <a href="logout.php">Logoff</a>
         </div>
     </div>

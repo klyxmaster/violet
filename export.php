@@ -1,4 +1,14 @@
 <?php
+/**
+ * Proprietary License
+ *
+ * Copyright (c) 2024 Richard Scorpio
+ *
+ * All rights reserved. This software is proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.
+ * Contact rickscorpio@proton.me for licensing information.
+ * Subject: Violet PWM
+ */
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -8,28 +18,42 @@ if (!isset($_SESSION['user_id'])) {
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $type = $_POST['type'];
+$type = isset($_GET['type']) ? $_GET['type'] : null;
 
-    if ($type == 'websites') {
-        $stmt = $con->prepare('SELECT * FROM websitedetails');
-    } elseif ($type == 'banks') {
-        $stmt = $con->prepare('SELECT * FROM bankdetails');
-    } else {
-        die('Invalid type');
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $type) {
+    try {
+        if ($type === 'websites') {
+            $data = getAllWebsites($con);
+            $filename = 'websites_export.xml';
+        } elseif ($type === 'banks') {
+            $data = getAllBanks($con);
+            $filename = 'banks_export.xml';
+        } else {
+            throw new Exception('Invalid export type.');
+        }
+
+        if (empty($data)) {
+            throw new Exception('No data available for export.');
+        }
+
+        header('Content-Type: application/xml');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        $xml = new SimpleXMLElement('<root/>');
+        foreach ($data as $item) {
+            $itemNode = $xml->addChild('item');
+            foreach ($item as $key => $value) {
+                $itemNode->addChild($key, htmlspecialchars($value));
+            }
+        }
+
+        echo $xml->asXML();
+        exit();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        echo 'Error: ' . $e->getMessage();
+        exit();
     }
-
-    $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $filename = $type . '_backup_' . date('Y-m-d') . '.xml';
-    header('Content-Type: application/xml');
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-
-    $xml = new SimpleXMLElement('<root/>');
-    array_walk_recursive($data, array ($xml, 'addChild'));
-    print $xml->asXML();
-    exit();
 }
 ?>
 
@@ -43,13 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Export Data</h1>
-        <form action="export.php" method="post">
-            <label for="type">Select data type to export:</label>
-            <select name="type" id="type" required>
-                <option value="websites">Websites</option>
-                <option value="banks">Banks</option>
-            </select><br><br>
+        <h1 class="title">VIOLET</h1>
+        <p class="subtitle">Export Data</p>
+        <form method="POST">
+            <p>Are you sure you want to export all <?= htmlspecialchars($type) ?> data?</p>
             <button type="submit">Export</button>
         </form>
         <p><a href="index.php">Back to Home</a></p>
