@@ -24,6 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $web_name = $_POST['web_name'];
     $web_login = $_POST['web_login'];
     $web_password = encryptData($_POST['web_password']);
+	$date_edited = date('Y-m-d H:i:s');
+	$date_created = $date_edited;
 
     // Check for duplicates
     $stmt = $con->prepare('SELECT * FROM websitedetails WHERE Web_Address = ?');
@@ -35,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (isset($_POST['confirm']) || count($duplicates) === 0) {
-        $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password) VALUES (?, ?, ?, ?)');
-        $stmt->execute([$web_address, $web_name, $web_login, $web_password]);
+        $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password, Web_Date_Created, Web_Date_Edited) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$web_address, $web_name, $web_login, $web_password, $date_created, $date_edited]);
 
         $success = "Website entry added successfully!";
     }

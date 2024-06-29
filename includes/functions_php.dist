@@ -11,6 +11,7 @@
  
 define('ENCRYPTION_KEY', 'your_secret_key'); // Replace with your own secret key
 
+
 function encryptData($data) {
     $key = hash('sha256', ENCRYPTION_KEY);
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
@@ -37,15 +38,19 @@ function addUser($con, $username, $email, $password, $create_datetime) {
 
 function addWebsite($con, $address, $sitename, $login, $password) {
     $encryptedPassword = encryptData($password);
-    $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password) VALUES (?, ?, ?, ?)');
-    $stmt->execute([$address, $sitename, $login, $encryptedPassword]);
+    $date_created = date('Y-m-d H:i:s');
+    $date_edited = $date_created; // Same as creation time
+    $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password, Web_Date_Created, Web_Date_Edited) VALUES (?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$address, $sitename, $login, $encryptedPassword, $date_created, $date_edited]);
 }
 
 function updateWebsite($con, $id, $address, $sitename, $login, $password) {
     $encryptedPassword = encryptData($password);
-    $stmt = $con->prepare('UPDATE websitedetails SET Web_Address = ?, Web_Name = ?, Web_Login = ?, Web_Password = ? WHERE Web_ID = ?');
-    $stmt->execute([$address, $sitename, $login, $encryptedPassword, $id]);
+    $date_edited = date('Y-m-d H:i:s');
+    $stmt = $con->prepare('UPDATE websitedetails SET Web_Address = ?, Web_Name = ?, Web_Login = ?, Web_Password = ?, Web_Date_Edited = ? WHERE Web_ID = ?');
+    $stmt->execute([$address, $sitename, $login, $encryptedPassword, $date_edited, $id]);
 }
+
 
 function getWebsiteById($con, $id) {
     $stmt = $con->prepare('SELECT * FROM websitedetails WHERE Web_ID = ?');
@@ -57,17 +62,22 @@ function addBank($con, $bankname, $cardnum, $validthru, $cardholder, $cvv, $card
     $encryptedCardNum = encryptData($cardnum);
     $encryptedCvv = encryptData($cvv);
     $encryptedPin = encryptData($pin);
-    $stmt = $con->prepare('INSERT INTO bankdetails (Bank_Name, Bank_CardNum, Bank_ValidThru, Bank_CardHolder, Bank_Cvv, Bank_CardType, Bank_Pin) VALUES (?, ?, ?, ?, ?, ?, ?)');
-    $stmt->execute([$bankname, $encryptedCardNum, $validthru, $cardholder, $encryptedCvv, $cardtype, $encryptedPin]);
+    $date_created = date('Y-m-d H:i:s');
+    $date_edited = $date_created; // Same as creation time
+    $stmt = $con->prepare('INSERT INTO bankdetails (Bank_Name, Bank_CardNum, Bank_ValidThru, Bank_CardHolder, Bank_Cvv, Bank_CardType, Bank_Pin, Bank_Date_Created, Bank_Date_Edited) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$bankname, $encryptedCardNum, $validthru, $cardholder, $encryptedCvv, $cardtype, $encryptedPin, $date_created, $date_edited]);
 }
+
 
 function updateBank($con, $id, $bankname, $cardnum, $validthru, $cardholder, $cvv, $cardtype, $pin) {
     $encryptedCardNum = encryptData($cardnum);
     $encryptedCvv = encryptData($cvv);
     $encryptedPin = encryptData($pin);
-    $stmt = $con->prepare('UPDATE bankdetails SET Bank_Name = ?, Bank_CardNum = ?, Bank_ValidThru = ?, Bank_CardHolder = ?, Bank_Cvv = ?, Bank_CardType = ?, Bank_Pin = ? WHERE Bank_ID = ?');
-    $stmt->execute([$bankname, $encryptedCardNum, $validthru, $cardholder, $encryptedCvv, $cardtype, $encryptedPin, $id]);
+    $date_edited = date('Y-m-d H:i:s');
+    $stmt = $con->prepare('UPDATE bankdetails SET Bank_Name = ?, Bank_CardNum = ?, Bank_ValidThru = ?, Bank_CardHolder = ?, Bank_Cvv = ?, Bank_CardType = ?, Bank_Pin = ?, Bank_Date_Edited = ? WHERE Bank_ID = ?');
+    $stmt->execute([$bankname, $encryptedCardNum, $validthru, $cardholder, $encryptedCvv, $cardtype, $encryptedPin, $date_edited, $id]);
 }
+
 
 function getBankById($con, $id) {
     $stmt = $con->prepare('SELECT * FROM bankdetails WHERE Bank_ID = ?');
