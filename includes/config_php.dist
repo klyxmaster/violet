@@ -1,0 +1,5 @@
+<?php
+	// THIS IS FOR A FUTURE REVISION TO SIMPLIFY SOME VARIABLES
+	define('ENCRYPTION_KEY', 'your_secret_key'); // Replace with your own secret key
+	define('MAX_PAGES', 8); // How many pages per view of websites and banks
+	

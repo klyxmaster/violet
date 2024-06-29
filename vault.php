@@ -25,13 +25,13 @@ include 'includes/functions.php';
 $showData = false;
 $type = '';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$items_per_page = 10;
+$items_per_page = 7;
 $offset = ($page - 1) * $items_per_page;
 
 if (isset($_SESSION['unlock'])) {
     $showData = true;
     $type = $_GET['type'];
-    // Do not unset $_SESSION['unlock'] here
+    //unset($_SESSION['unlock']);
 }
 
 if (isset($_GET['unlock'])) {
@@ -103,22 +103,28 @@ $total_pages = ceil($total_items / $items_per_page);
                             <th>Login</th>
                             <th>Password</th>
                             <th>Actions</th>
+                            <th>Date Created</th>
+                            <th>Date Edited</th>
                         </tr>
                         <?php
-                        $websites = getItems($con, 'websites', $items_per_page, $offset);
-                        foreach ($websites as $row) {
-                            echo '<tr>';
-                            echo '<td>' . htmlspecialchars($row['Web_ID']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Web_Address']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Web_Name']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Web_Login']) . '</td>';
-                            echo '<td>' . htmlspecialchars(decryptData($row['Web_Password'])) . '</td>';
-                            echo '<td>
-                                    <a href="edit_website.php?id=' . htmlspecialchars($row['Web_ID']) . '">Edit</a> | 
-                                    <a href="delete_website.php?id=' . htmlspecialchars($row['Web_ID']) . '" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>
-                                  </td>';
-                            echo '</tr>';
-                        }
+                         $websites = getItems($con, 'websites', $items_per_page, $offset);
+						foreach ($websites as $row) {
+							echo '<tr>';
+							echo '<td>' . htmlspecialchars($row['Web_ID'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Web_Address'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Web_Name'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Web_Login'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars(decryptData($row['Web_Password'] ?? '')) . '</td>';
+							echo '<td>
+									<a href="edit_website.php?id=' . htmlspecialchars($row['Web_ID'] ?? '') . '">Edit</a> | 
+									<a href="delete_website.php?id=' . htmlspecialchars($row['Web_ID'] ?? '') . '" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>
+								  </td>';
+							echo '<td>' . htmlspecialchars($row['Web_Date_Created'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Web_Date_Edited'] ?? '') . '</td>';
+
+							echo '</tr>';
+							
+						}
                         ?>
                     </table>
                 <?php elseif ($type == 'banks'): ?>
@@ -134,36 +140,43 @@ $total_pages = ceil($total_items / $items_per_page);
                             <th>Card Type</th>
                             <th>PIN</th>
                             <th>Actions</th>
+                            <th>Date Created</th>
+                            <th>Date Edited</th>
                         </tr>
                         <?php
-                        $banks = getItems($con, 'banks', $items_per_page, $offset);
-                        foreach ($banks as $row) {
-                            echo '<tr>';
-                            echo '<td>' . htmlspecialchars($row['Bank_ID']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Bank_Name']) . '</td>';
-                            echo '<td>' . htmlspecialchars(decryptData($row['Bank_CardNum'])) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Bank_ValidThru']) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Bank_CardHolder']) . '</td>';
-                            echo '<td>' . htmlspecialchars(decryptData($row['Bank_Cvv'])) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Bank_CardType']) . '</td>';
-                            echo '<td>' . htmlspecialchars(decryptData($row['Bank_Pin'])) . '</td>';
-                            echo '<td>
-                                    <a href="edit_bank.php?id=' . htmlspecialchars($row['Bank_ID']) . '">Edit</a> | 
-                                    <a href="delete_bank.php?id=' . htmlspecialchars($row['Bank_ID']) . '" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>
-                                  </td>';
-                            echo '</tr>';
-                        }
+                        $banks = getItems($con, 'banks', $items_per_page, $offset);                        
+						foreach ($banks as $row) {
+							echo '<tr>';
+							echo '<td>' . htmlspecialchars($row['Bank_ID'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Bank_Name'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars(decryptData($row['Bank_CardNum'] ?? '')) . '</td>';
+							echo '<td>' . htmlspecialchars($row['Bank_ValidThru'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Bank_CardHolder'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars(decryptData($row['Bank_Cvv'] ?? '')) . '</td>';
+							echo '<td>' . htmlspecialchars($row['Bank_CardType'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars(decryptData($row['Bank_Pin'] ?? '')) . '</td>';
+							echo '<td>
+									<a href="edit_bank.php?id=' . htmlspecialchars($row['Bank_ID'] ?? '') . '">Edit</a> | 
+									<a href="delete_bank.php?id=' . htmlspecialchars($row['Bank_ID'] ?? '') . '" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>
+								  </td>';
+							echo '<td>' . htmlspecialchars($row['Bank_Date_Created'] ?? '') . '</td>';
+							echo '<td>' . htmlspecialchars($row['Bank_Date_Edited'] ?? '') . '</td>';
+							echo '</tr>';
+							
+
+
+						}
                         ?>
                     </table>
                 <?php endif; ?>
             </div>
             <div class="pagination">
                 <?php if ($page > 1): ?>
-                    <a href="vault.php?type=<?= $type ?>&page=<?= $page - 1 ?>">Prev</a>
+                    <a href="vault.php?type=<?= $type ?>&page=<?= $page - 1 ?>" class="button-link">Prev</a>
                 <?php endif; ?>
-                <a href="index.php">Menu</a>
+                <a href="index.php" class="button-link">Menu</a>
                 <?php if ($page < $total_pages): ?>
-                    <a href="vault.php?type=<?= $type ?>&page=<?= $page + 1 ?>">Next</a>
+                    <a href="vault.php?type=<?= $type ?>&page=<?= $page + 1 ?>" class="button-link">Next</a>
                 <?php endif; ?>
             </div>
         <?php else: ?>
@@ -173,7 +186,6 @@ $total_pages = ceil($total_items / $items_per_page);
                 <button type="submit" name="unlock">Unlock</button>
             </form>
         <?php endif; ?>
-    
     </div>
     <?php include 'footer.php'; ?>
 </body>
