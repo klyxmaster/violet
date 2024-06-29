@@ -31,7 +31,7 @@ $offset = ($page - 1) * $items_per_page;
 if (isset($_SESSION['unlock'])) {
     $showData = true;
     $type = $_GET['type'];
-    unset($_SESSION['unlock']);
+    // Do not unset $_SESSION['unlock'] here
 }
 
 if (isset($_GET['unlock'])) {
@@ -42,7 +42,7 @@ if (isset($_GET['unlock'])) {
     if ($user) {
         $_SESSION['unlock'] = true;
         $type = $_GET['type'];
-        header("Location: vault.php?type=$type");
+        header("Location: vault.php?type=$type&page=$page");
         exit();
     } else {
         $error = 'Invalid password';
@@ -173,7 +173,6 @@ $total_pages = ceil($total_items / $items_per_page);
                 <button type="submit" name="unlock">Unlock</button>
             </form>
         <?php endif; ?>
-
     
     </div>
     <?php include 'footer.php'; ?>
