@@ -1,15 +1,5 @@
 <?php
 session_start();
-/**
- * Proprietary License
- *
- * Copyright (c) 2024 Richard Scorpio
- *
- * All rights reserved. This software is proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.
- * Contact rickscorpio@proton.me for licensing information.
- * Subject: Violet PWM
- */
- 
 if (!isset($_SESSION['2fa_pending'])) {
     header('Location: login.php');
     exit();
@@ -26,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        $new_codes_str = use2FACode($code, $user['2fa_str']);
+        $new_codes_str = use2FACode($user['username'], $code, $user['2fa_str']);
         if ($new_codes_str !== false) {
             $stmt = $con->prepare('UPDATE users SET 2fa_str = ? WHERE id = ?');
             $stmt->execute([$new_codes_str, $_SESSION['2fa_pending']]);
@@ -58,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <div class="form-group">
                 <label for="code">Enter 2FA Code:</label>
-                <input type="text" id="code" name="code" required>
+                <input type="text" id="code" name="code" required autofocus>
             </div>
             <button type="submit">Verify</button>
         </form>

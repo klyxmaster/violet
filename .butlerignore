@@ -1,6 +1,0 @@
-.svn/*
-.git/*
-sql/appgetm1_violet.sql
-sql/violetpwm.sql
-includes/functions.php
-includes/dbconnect.php

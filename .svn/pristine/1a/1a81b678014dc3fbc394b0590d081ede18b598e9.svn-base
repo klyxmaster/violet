@@ -1,15 +1,5 @@
 <?php
 session_start();
-/**
- * Proprietary License
- *
- * Copyright (c) 2024 Richard Scorpio
- *
- * All rights reserved. This software is proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.
- * Contact rickscorpio@proton.me for licensing information.
- * Subject: Violet PWM
- */
- 
 if (!isset($_SESSION['2fa_pending'])) {
     header('Location: login.php');
     exit();

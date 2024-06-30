@@ -1,13 +1,4 @@
 <?php
-/**
- * Proprietary License
- *
- * Copyright (c) 2024 Richard Scorpio
- *
- * All rights reserved. This software is proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.
- * Contact rickscorpio@proton.me for licensing information.
- * Subject: Violet PWM
- */
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
