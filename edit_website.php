@@ -8,13 +8,13 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
-
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
@@ -32,6 +32,7 @@ if (isset($_POST['update_website'])) {
 
     updateWebsite($con, $id, $address, $sitename, $login, $password);
 
+    // Redirect to vault.php without asking for the password again
     $_SESSION['success'] = 'Website details updated successfully!';
     header('Location: vault.php?type=websites');
     exit();
@@ -45,6 +46,7 @@ if (isset($_POST['update_website'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Website - VIOLET</title>
     <link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
 </head>
 <body>
     <div class="container">
@@ -61,6 +63,6 @@ if (isset($_POST['update_website'])) {
         </form>
         <p><a href="vault.php?type=websites">Back to Vault</a></p>
     </div>
-	 <?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

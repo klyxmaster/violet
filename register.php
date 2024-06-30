@@ -8,7 +8,7 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
-
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 
 session_start();
@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
 </head>
 <body>
     <div class="container">
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" required autofocus>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>

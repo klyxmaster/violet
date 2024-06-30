@@ -9,12 +9,11 @@
  * Subject: Violet PWM
  */
  
-$dsn = 'mysql:host=localhost;dbname=violetpwm';
-$username = 'root';
-$password = '';
+	$dsn = 'mysql:host='.HOST.';dbname='.DBNAME;
+
 
 try {
-    $con = new PDO($dsn, $username, $password);
+    $con = new PDO($dsn, SQLUSER, SQLPASS);
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();

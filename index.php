@@ -8,7 +8,7 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
- 
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -23,13 +23,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIOLET</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .menu {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
 </head>
 <body>
     <div class="container">
@@ -37,25 +31,42 @@ if (!isset($_SESSION['user_id'])) {
         <p class="subtitle">My Personal Password Manager</p>
         <p>Welcome, <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>!</p>
         <div class="navbar">
-			<a href="index.php">Home</a>
-			<a href="vault.php?type=websites">View Websites</a>
-			<a href="vault.php?type=banks">View Banks</a>
-			<div class="dropdown">
-				<button class="dropbtn">Add/Edit
-					<i class="fa fa-caret-down"></i>
-				</button>
-				<div class="dropdown-content">
-					<a href="add_website.php">Add Website</a>
-					<a href="add_bank.php">Add Bank</a>
-					<a href="account_editor.php">Edit Account</a>
-				</div>
-			</div> 
-			<a href="about.php">About</a>
-			<a href="donate.php">Donate</a>
-			<a href="logoff.php">Logoff</a>
-		</div>
-	
+            <div class="dropdown">
+                <button class="dropbtn">View</button>
+                <div class="dropdown-content">
+                    <a href="vault.php?type=websites">View Websites</a>
+                    <a href="vault.php?type=banks">View Banks</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Add</button>
+                <div class="dropdown-content">
+                    <a href="add_website.php">Add Website</a>
+                    <a href="add_bank.php">Add Bank</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Other</button>
+                <div class="dropdown-content">
+                    <a href="account_editor.php">Edit Account</a>
+                    <a href="about.php">About</a>
+                    <a href="create_2fa_codes.php">Create New 2FA Codes</a>
+                    <a href="2fa_codes.php">View Current 2FA Codes</a> <!-- New link added here -->
+                    <a href="donate.php">Donate</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Import/Export</button>
+                <div class="dropdown-content">
+                    <a href="import.php?type=websites">Import Websites</a>
+                    <a href="import.php?type=banks">Import Banks</a>
+                    <a href="export.php?type=websites">Export Websites</a>
+                    <a href="export.php?type=banks">Export Banks</a>
+                </div>
+            </div>
+            <a href="logout.php">Logoff</a>
+        </div>
     </div>
-	  <?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

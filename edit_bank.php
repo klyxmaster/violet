@@ -15,6 +15,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
@@ -48,6 +49,7 @@ if (isset($_POST['update_bank'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Bank - VIOLET</title>
     <link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
 </head>
 <body>
     <div class="container">
@@ -56,7 +58,7 @@ if (isset($_POST['update_bank'])) {
         <h2>Edit Bank Details</h2>
         <form action="edit_bank.php" method="post">
             <input type="hidden" name="id" value="<?= htmlspecialchars($bank['Bank_ID']); ?>">
-            <input type="text" name="bankname" placeholder="Bank Name" value="<?= htmlspecialchars($bank['Bank_Name']); ?>" required><br>
+            <input type="text" name="bankname" placeholder="Bank Name" value="<?= htmlspecialchars($bank['Bank_Name']); ?>" required autofocus><br>
             <input type="text" name="cardnum" placeholder="Card Number" value="<?= htmlspecialchars(decryptData($bank['Bank_CardNum'])); ?>" required><br>
             <input type="text" name="validthru" placeholder="Valid Thru" value="<?= htmlspecialchars($bank['Bank_ValidThru']); ?>" required><br>
             <input type="text" name="cardholder" placeholder="Card Holder" value="<?= htmlspecialchars($bank['Bank_CardHolder']); ?>" required><br>

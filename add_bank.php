@@ -14,6 +14,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
@@ -53,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Bank - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
 </head>
 <body>
     <div class="container">
@@ -63,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="form-group">
                     <label for="bank_name">Bank Name:</label>
-                    <input type="text" id="bank_name" name="bank_name" required>
+                    <input type="text" id="bank_name" name="bank_name" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="card_num">Card Number:</label>

@@ -14,6 +14,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
@@ -24,6 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $web_name = $_POST['web_name'];
     $web_login = $_POST['web_login'];
     $web_password = encryptData($_POST['web_password']);
+	$date_edited = date('Y-m-d H:i:s');
+	$date_created = $date_edited;
 
     // Check for duplicates
     $stmt = $con->prepare('SELECT * FROM websitedetails WHERE Web_Address = ?');
@@ -35,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (isset($_POST['confirm']) || count($duplicates) === 0) {
-        $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password) VALUES (?, ?, ?, ?)');
-        $stmt->execute([$web_address, $web_name, $web_login, $web_password]);
+        $stmt = $con->prepare('INSERT INTO websitedetails (Web_Address, Web_Name, Web_Login, Web_Password, Web_Date_Created, Web_Date_Edited) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$web_address, $web_name, $web_login, $web_password, $date_created, $date_edited]);
 
         $success = "Website entry added successfully!";
     }
@@ -50,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Website - Violet PWM</title>
     <link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico"> <!-- Add this line -->
 </head>
 <body>
     <div class="container">
@@ -60,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="form-group">
                     <label for="web_address">Website Address:</label>
-                    <input type="text" id="web_address" name="web_address" required>
+                    <input type="text" id="web_address" name="web_address" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="web_name">Website Name:</label>
