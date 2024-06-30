@@ -28,7 +28,8 @@
 
         <p>If you find Violet PWM helpful and would like to support its ongoing development and maintenance, please consider making a small donation. Your contribution helps cover miscellaneous expenses and keeps me motivated to continue improving the project and incorporating new features.</p>
 
-        <p>Donations can be made via PayPal: <a href="https://www.paypal.com/donate/?hosted_button_id=T8FHWDSPU88X8">Donate</a></p>
+        <p>Donations can be made via PayPal: <a href="https://www.paypal.com/donate/?hosted_button_id=T8FHWDSPU88X8" target="_blank">Donate</a></p>
+		<p>Or just buy me a coffee then I can program in "hyper" mode :-) <a href="https://buymeacoffee.com/ricksprojects" target="_blank">Buy Me Coffee</a></p>
 
         <p>Thank you for your support and for being a part of the Violet PWM community.</p>
 
