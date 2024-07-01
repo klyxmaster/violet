@@ -21,7 +21,7 @@ Follow these steps to set up Violet PWM on your local environment.
 Clone the repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/yourusername/violet-pwm.git
+git clone https://github.com/klyxmaster/violet.git
 ```
 ### Step 2: Set Up the Database
 
@@ -47,15 +47,23 @@ Update the database connection settings.
 
 ```php
 <?php
-// removed the "*_php.dist" to *.php
-// dbconnect.php
-
-$dsn = 'mysql:host=localhost;dbname=violetpwm';
-$username = 'root';
-$password = '';
-
-// functions.php
-define('ENCRYPTION_KEY', 'your-secret-key'); // Replace with your own secret key
+// RENAME CONFIG_PHP.DIST TO CONFIG.PHP
+<?php
+	// SQL SERVER INFORMATION
+	define('HOST', 'localhost');	//DB HOST	
+	define('DBNAME', 'violetpwm');	//DB DB NAME
+	define('SQLUSER','root');		//DB USER
+	define('SQLPASS', '');			//DB PASSWORD
+	
+	//MISC SETTINGS
+	define('ENCRYPTION_KEY', 'YOUR_SECRET_KEY'); // Replace with your own secret key
+    // DO NOT CHANGE OR LOOSE ONCE SET, IT CONTROLS LOGIN, WEBSITE/BANK ENCRYPTIONG.
+    // YOU LOOSE IT, GAME OVER! THERE IS NOBACK DODOR TO VIOLET!
+	define('MAX_PAGES', 8); // How many pages per view of websites and banks
+	
+	//2FA AUTH
+	define('CODE_GEN_MAX', 15); // Max number of 2fa codes to create. 20 is good.
+	
 ?>
 ```
 **Linux:** Set the correct file permissions for the project directory.
