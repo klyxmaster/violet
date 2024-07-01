@@ -48,6 +48,12 @@ function updateWebsite($con, $id, $address, $sitename, $login, $password) {
     $stmt->execute([$address, $sitename, $login, $encryptedPassword, $date_edited, $id]);
 }
 
+function getAllWebsites($con) {
+    $stmt = $con->prepare('SELECT * FROM websitedetails');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 function getWebsiteById($con, $id) {
     $stmt = $con->prepare('SELECT * FROM websitedetails WHERE Web_ID = ?');
@@ -90,6 +96,12 @@ function deleteWebsite($con, $id) {
 function deleteBank($con, $id) {
     $stmt = $con->prepare('DELETE FROM bankdetails WHERE Bank_ID = ?');
     $stmt->execute([$id]);
+}
+
+function getAllBanks($con) {
+    $stmt = $con->prepare('SELECT * FROM bankdetails');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function generate2FACodes($username, $count = 15) {

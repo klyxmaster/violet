@@ -1,4 +1,4 @@
 .svn/
-includes/functions.php
-includes/dbconnect.php
+includes/config.php
+sql/localviolet.sql
 .butlerignore

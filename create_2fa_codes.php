@@ -8,15 +8,22 @@
  * Contact rickscorpio@proton.me for licensing information.
  * Subject: Violet PWM
  */
+ 
+ 
 session_start();
+include 'includes/config.php';
+include 'includes/dbconnect.php';
+include 'includes/functions.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
-include 'includes/config.php';
-include 'includes/dbconnect.php';
-include 'includes/functions.php';
 
 $stmt = $con->prepare('SELECT username FROM users WHERE id = ?');
 $stmt->execute([$_SESSION['user_id']]);
