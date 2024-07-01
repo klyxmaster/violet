@@ -1,6 +1,6 @@
 # Violet PWM
 
-Violet PWM is a personal password manager designed to securely store website and bank details. This project is protected under a proprietary license. Unauthorized copying or distribution is prohibited.
+Violet PWM is a personal password manager designed to securely store website and bank details. This project is protected under a proprietary license. Unauthorized copying or distribution is prohibited. THIS IS FREE! ALWAYS FREE! If you are paying for any part of it, report it and get this one. If you find this useful, a TIP is great!! Thanks!!
 
 # FUTURE UPDATES:
 Future updates will be done at sourceforge, only because I like SVN better than GIT. I will from time to time update here. depends on my mood. [Check out my files here](https://sourceforge.net/projects/violetpwm/) This code was last updated June 26, 2024.
