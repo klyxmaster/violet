@@ -10,17 +10,27 @@
  */
 
 function encryptData($data) {
-    $key = hash('sha256', ENCRYPTION_KEY);
+    $key = hash('sha256', ENCRYPTION_KEY, true); // use raw binary
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-    $encryptedData = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+    $encryptedData = openssl_encrypt($data, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
     return base64_encode($encryptedData . '::' . $iv);
 }
 
+
 function decryptData($data) {
-    $key = hash('sha256', ENCRYPTION_KEY);
-    list($encryptedData, $iv) = explode('::', base64_decode($data), 2);
-    return openssl_decrypt($encryptedData, 'aes-256-cbc', $key, 0, $iv);
+    $key = hash('sha256', ENCRYPTION_KEY, true); // use raw binary
+
+    $decoded = base64_decode($data, true);
+    if ($decoded === false) return null;
+
+    $parts = explode('::', $decoded);
+    if (count($parts) !== 2) return null;
+
+    list($encryptedData, $iv) = $parts;
+
+    return openssl_decrypt($encryptedData, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
 }
+
 
 function getUserByUsernameAndPassword($con, $username, $password) {
     $stmt = $con->prepare('SELECT * FROM users WHERE username = ? AND password = ?');
@@ -44,14 +54,14 @@ function addWebsite($con, $address, $sitename, $login, $password, $secretCode) {
 function updateWebsite($con, $id, $address, $sitename, $login, $password, $secretCode) {
     $encryptedPassword = encryptData($password);
     $date_edited = date('Y-m-d H:i:s');
-    $stmt = $con->prepare('UPDATE websitedetails SET Web_Address = ?, Web_Name = ?, Web_Login = ?, Web_Password = ?, Web_Date_Edited = ? WHERE Web_ID = ?');
-    $stmt->execute($address, $sitename, $login, $encryptedPassword, $secretCode, $date_edited, $id);
+    $stmt = $con->prepare('UPDATE websitedetails SET Web_Address = ?, Web_Name = ?, Web_Login = ?, Web_Password = ?, Web_SecretCode = ?, Web_Date_Edited = ? WHERE Web_ID = ?');
+    $stmt->execute([$address, $sitename, $login, $encryptedPassword, $secretCode, $date_edited, $id]);
 }
 
 
 function getWebsiteById($con, $id) {
     $stmt = $con->prepare('SELECT * FROM websitedetails WHERE Web_ID = ?');
-    $stmt->execute($id);
+    $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -66,19 +76,19 @@ function addBank($con, $bankname, $cardnum, $validthru, $cardholder, $cvv, $card
 }
 
 
-function updateBank($con, $id, $bankname, $cardnum, $validthru, $cardholder, $cvv, $cardtype, $pin) {
+function updateBank($con, $id, $bankname, $cardnum, $validthru, $cvv, $cardtype) {
     $encryptedCardNum = encryptData($cardnum);
     $encryptedCvv = encryptData($cvv);
-    $encryptedPin = encryptData($pin);
+    
     $date_edited = date('Y-m-d H:i:s');
-    $stmt = $con->prepare('UPDATE bankdetails SET Bank_Name = ?, Bank_CardNum = ?, Bank_ValidThru = ?, Bank_CardHolder = ?, Bank_Cvv = ?, Bank_CardType = ?, Bank_Pin = ?, Bank_Date_Edited = ? WHERE Bank_ID = ?');
-    $stmt->execute($bankname, $encryptedCardNum, $validthru, $cardholder, $encryptedCvv, $cardtype, $encryptedPin, $date_edited, $id);
+    $stmt = $con->prepare('UPDATE bankdetails SET Bank_Name = ?, Bank_CardNum = ?, Bank_ValidThru = ?, Bank_Cvv = ?, Bank_CardType = ?, Bank_Date_Edited = ? WHERE Bank_ID = ?');
+    $stmt->execute([$bankname, $encryptedCardNum, $validthru,$encryptedCvv, $cardtype, $date_edited, $id]);
 }
 
 
 function getBankById($con, $id) {
     $stmt = $con->prepare('SELECT * FROM bankdetails WHERE Bank_ID = ?');
-    $stmt->execute($id);
+    $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 

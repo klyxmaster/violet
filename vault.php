@@ -128,11 +128,11 @@ $total_pages = ceil($total_items / $items_per_page);
                         foreach ($websites as $row) {
                             echo '<tr>';
                             echo '<td>' . htmlspecialchars($row['Web_ID'] ?? '') . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Web_Address'] ?? '') . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Web_Name'] ?? '') . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Web_Login'] ?? '') . '</td>';
-                            echo '<td>' . htmlspecialchars(decryptData($row['Web_Password'] ?? '')) . '</td>';
-                            echo '<td>
+                            echo '<td class="copycell">' . htmlspecialchars($row['Web_Address'] ?? '') . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars($row['Web_Name'] ?? '') . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars($row['Web_Login'] ?? '') . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars(decryptData($row['Web_Password'] ?? '')) . '</td>';
+                            echo '<td class="copycell">
 										<a href="edit_website.php?id=' . htmlspecialchars($row['Web_ID'] ?? '') . '">Edit</a> | 
 										<a href="delete_website.php?id=' . htmlspecialchars($row['Web_ID'] ?? '') . '" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>';
 
@@ -172,11 +172,11 @@ $total_pages = ceil($total_items / $items_per_page);
                         foreach ($banks as $row) {
                             echo '<tr>';
                             echo '<td>' . htmlspecialchars($row['Bank_ID'] ?? '') . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Bank_Name'] ?? '') . '</td>';
-                            echo '<td>' . htmlspecialchars(decryptData($row['Bank_CardNum'] ?? '')) . '</td>';
-                            echo '<td>' . htmlspecialchars($row['Bank_ValidThru'] ?? '') . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars($row['Bank_Name'] ?? '') . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars(decryptData($row['Bank_CardNum'] ?? '')) . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars($row['Bank_ValidThru'] ?? '') . '</td>';
                            
-                            echo '<td>' . htmlspecialchars(decryptData($row['Bank_Cvv'] ?? '')) . '</td>';
+                            echo '<td class="copycell">' . htmlspecialchars(decryptData($row['Bank_Cvv'] ?? '')) . '</td>';
                             echo '<td>' . htmlspecialchars($row['Bank_CardType'] ?? '') . '</td>';
                            
                             echo '<td>
@@ -201,6 +201,23 @@ $total_pages = ceil($total_items / $items_per_page);
         <?php endif; ?>
     </div>
     <?php include 'footer.php'; ?>	
+	
+	<script>
+	document.addEventListener('DOMContentLoaded', () => {
+	  document.querySelectorAll('td.copycell').forEach(cell => {
+		cell.style.cursor = 'pointer';
+		cell.title = 'Click to copy';
+		cell.addEventListener('click', () => {
+		  const text = cell.textContent.trim();
+		  navigator.clipboard.writeText(text).then(() => {
+			cell.style.backgroundColor = '#d4edda'; // flash green
+			setTimeout(() => cell.style.backgroundColor = '', 500);
+		  });
+		});
+	  });
+	});
+	</script>
+
 </body>
 </html>
 

@@ -10,7 +10,7 @@
  */
 
 session_start();
-if (!isset($_SESSION['user_id')) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
@@ -18,19 +18,25 @@ include 'includes/config.php';
 include 'includes/dbconnect.php';
 include 'includes/functions.php';
 
-if (isset($_GET['id')) {
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $website = getWebsiteById($con, $id);
 }
 
-if (isset($_POST['update_website')) {
+if (isset($_POST['update_website'])) {
     $id = $_POST['id'];
     $address = $_POST['address'];
     $sitename = $_POST['sitename'];
     $login = $_POST['login'];
     $password = $_POST['password'];
+	$secretCode = $_POST['web_secretCode']; // this will yeild nothing because it was not sent via post but a button?
+	
+	 // 🧠 Preserve original if field is empty
+    if (empty($secretCode) && isset($website['Web_SecretCode'])) {
+        $secretCode = $website['Web_SecretCode'];
+    }
 
-    updateWebsite($con, $id, $address, $sitename, $login, $password);
+    updateWebsite($con, $id, $address, $sitename, $login, $password, $secretCode);
 
     // Redirect to vault.php without asking for the password again
     $_SESSION['success'] = 'Website details updated successfully!';
@@ -54,11 +60,12 @@ if (isset($_POST['update_website')) {
         <p class="subtitle">My Personal Password Manager</p>
         <h2>Edit Website Details</h2>
         <form action="edit_website.php" method="post">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($website['Web_ID'); ?>">
-            <input type="text" name="address" placeholder="Website Address" value="<?= htmlspecialchars($website['Web_Address'); ?>" required><br>
-            <input type="text" name="sitename" placeholder="Website Name" value="<?= htmlspecialchars($website['Web_Name'); ?>" required><br>
-            <input type="text" name="login" placeholder="Login" value="<?= htmlspecialchars($website['Web_Login'); ?>" required><br>
-            <input type="password" name="password" placeholder="Password" value="<?= htmlspecialchars(decryptData($website['Web_Password')); ?>" required><br>
+            <input type="hidden" name="id" value="<?= htmlspecialchars($website['Web_ID']); ?>">
+            <input type="text" name="address" placeholder="Website Address" value="<?= htmlspecialchars($website['Web_Address']); ?>" required><br>
+            <input type="text" name="sitename" placeholder="Website Name" value="<?= htmlspecialchars($website['Web_Name']); ?>" required><br>
+            <input type="text" name="login" placeholder="Login" value="<?= htmlspecialchars($website['Web_Login']); ?>" required><br>
+            <input type="password" name="password" placeholder="Password" value="<?= htmlspecialchars(decryptData($website['Web_Password'])); ?>" required><br>
+			<input type="text" name="web_secretCode" placeholder="secretCode" value="<?= htmlspecialchars($website['Web_SecretCode']??""); ?>" required><br>
             <button type="submit" name="update_website">Update Website</button>
         </form>
         <p><a href="vault.php?type=websites">Back to Vault</a></p>
