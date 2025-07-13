@@ -1,0 +1,14 @@
+<?php
+	// SQL SERVER INFORMATION
+	define('HOST', 'localhost');	//DB HOST	
+	define('DBNAME', 'violetpwm');	//DB DB NAME
+	define('SQLUSER','root');		//DB USER
+	define('SQLPASS', '4179');			//DB PASSWORD
+	
+	//MISC SETTINGS
+	define('ENCRYPTION_KEY', '~Rr:;t!Bx{.4C=HijG2U.rsn]'); // Replace with your own secret key
+	define('MAX_PAGES', 8); // How many pages per view of websites and banks
+	
+	//2FA AUTH
+	define('CODE_GEN_MAX', 15); // Max number of 2fa codes to create. 20 is good.
+	
